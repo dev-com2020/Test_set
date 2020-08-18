@@ -24,7 +24,7 @@ public class TC_set_bugged_app_chrome {
 
         @Before
         public void setUp() {
-            File file = new File("D:/chromedriver.exe");
+            File file = new File("C:/Users/razor/IdeaProjects/Test_set/src/main/resources/chromedriver.exe");
             System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
             wd = new ChromeDriver();
             url = "https://bugged-tester-recruitment-task.netlify.app/";
@@ -32,8 +32,12 @@ public class TC_set_bugged_app_chrome {
             CardNumber = "2233114400002589";
             Cvv = "127";
 
+                   }
 
-        }
+@After
+public void tearDown() {
+wd.quit();
+}
 
         @Test
         public void IsBankTransferCorrect() {
@@ -105,16 +109,12 @@ public class TC_set_bugged_app_chrome {
         wd.findElement(By.id("cardExpDate")).click();
         wd.findElement(By.className("MuiPickersYear-yearSelected")).click();
         wd.findElement(By.className("MuiPickersMonth-monthSelected")).click();
-
         wd.findElement(By.className("MuiButton-contained")).click();
         Assert.assertFalse(wd.getPageSource().contains("Paid by card"));
 
     }
 
- //   @After
- //   public void tearDown3() {
- //       wd.quit();
- //   }
+
 
     @Test
     public void CardHolderTwoChar() {
@@ -131,7 +131,6 @@ public class TC_set_bugged_app_chrome {
         wd.findElement(By.id("cardExpDate")).click();
         wd.findElement(By.className("MuiPickersYear-yearSelected")).click();
         wd.findElement(By.className("MuiPickersMonth-monthSelected")).click();
-
         wd.findElement(By.className("MuiButton-contained")).click();
         Assert.assertFalse(wd.getPageSource().contains("Paid by card"));
 
@@ -154,7 +153,6 @@ public class TC_set_bugged_app_chrome {
         wd.findElement(By.id("cardExpDate")).click();
         wd.findElement(By.className("MuiPickersYear-yearSelected")).click();
         wd.findElement(By.className("MuiPickersMonth-monthSelected")).click();
-
         wd.findElement(By.className("MuiButton-contained")).click();
         Assert.assertFalse(wd.getPageSource().contains("Paid by card"));
 
@@ -177,9 +175,127 @@ public class TC_set_bugged_app_chrome {
         wd.findElement(By.id("cardExpDate")).click();
         wd.findElement(By.xpath("//div[(text()='2024')]")).click();
         wd.findElement(By.xpath("//div[text()='Sep']")).click();
-
         wd.findElement(By.className("MuiButton-contained")).click();
         Assert.assertTrue(wd.getPageSource().contains("Paid by card"));
+
+    }
+    @Test
+    public void CardExpDateInPaymentDetailFine() {
+        wd.get(url);
+        WebElement holderName = wd.findElement(By.id("cardOwnerName"));
+        holderName.clear();
+        holderName.sendKeys(CardHolder);
+        WebElement numberCard = wd.findElement(By.id("cardNumber"));
+        numberCard.clear();
+        numberCard.sendKeys(CardNumber);
+        WebElement cvv = wd.findElement(By.id("cvv"));
+        cvv.clear();
+        cvv.sendKeys(Cvv);
+        wd.findElement(By.id("cardExpDate")).click();
+        wd.findElement(By.xpath("//div[(text()='2024')]")).click();
+        wd.findElement(By.xpath("//div[text()='Sep']")).click();
+        wd.findElement(By.className("MuiButton-contained")).click();
+        Assert.assertTrue(wd.getPageSource().contains("09/2024"));
+
+    }
+
+    @Test
+    public void IconReviewYourOrderInCheckoutIsNotEnabled() {
+        wd.get(url);
+        WebElement holderName = wd.findElement(By.id("cardOwnerName"));
+        holderName.clear();
+        holderName.sendKeys(CardHolder);
+        WebElement numberCard = wd.findElement(By.id("cardNumber"));
+        numberCard.clear();
+        numberCard.sendKeys(CardNumber);
+        WebElement cvv = wd.findElement(By.id("cvv"));
+        cvv.clear();
+        cvv.sendKeys(Cvv);
+        wd.findElement(By.id("cardExpDate")).click();
+        wd.findElement(By.xpath("//div[(text()='2024')]")).click();
+        wd.findElement(By.xpath("//div[text()='Sep']")).click();
+        wd.findElement(By.className("MuiButton-contained")).click();
+        wd.findElement(By.className("Mui-disabled")).isDisplayed();
+        Assert.assertTrue(wd.getPageSource().contains("Paid by card"));
+
+    }
+    @Test
+    public void GivenCheckBoxRememberCreditCardDetailsEnabled() {
+        wd.get(url);
+        WebElement holderName = wd.findElement(By.id("cardOwnerName"));
+        holderName.clear();
+        holderName.sendKeys(CardHolder);
+        WebElement numberCard = wd.findElement(By.id("cardNumber"));
+        numberCard.clear();
+        numberCard.sendKeys(CardNumber);
+        WebElement cvv = wd.findElement(By.id("cvv"));
+        cvv.clear();
+        cvv.sendKeys(Cvv);
+        wd.findElement(By.id("cardExpDate")).click();
+        wd.findElement(By.xpath("//div[(text()='2024')]")).click();
+        wd.findElement(By.xpath("//div[text()='Sep']")).click();
+        wd.findElement(By.id("saveCard")).click();
+        wd.findElement(By.className("MuiButton-contained")).click();
+        Assert.assertTrue(wd.getPageSource().contains("Paid by card"));
+
+    }
+
+    @Test
+    public void CardHolderBadCharWithName() {
+        wd.get(url);
+        WebElement holderName = wd.findElement(By.id("cardOwnerName"));
+        holderName.clear();
+        holderName.sendKeys("Tomasz!#$Kaniecki!");
+        WebElement numberCard = wd.findElement(By.id("cardNumber"));
+        numberCard.clear();
+        numberCard.sendKeys(CardNumber);
+        WebElement cvv = wd.findElement(By.id("cvv"));
+        cvv.clear();
+        cvv.sendKeys(Cvv);
+        wd.findElement(By.id("cardExpDate")).click();
+        wd.findElement(By.className("MuiPickersYear-yearSelected")).click();
+        wd.findElement(By.className("MuiPickersMonth-monthSelected")).click();
+        wd.findElement(By.className("MuiButton-contained")).click();
+        Assert.assertTrue(wd.getPageSource().contains("Paid by card"));
+
+    }
+
+    @Test
+    public void CardNumberContainBadChar() {
+        wd.get(url);
+        WebElement holderName = wd.findElement(By.id("cardOwnerName"));
+        holderName.clear();
+        holderName.sendKeys(CardHolder);
+        WebElement numberCard = wd.findElement(By.id("cardNumber"));
+        numberCard.clear();
+        numberCard.sendKeys("22330000aa225148");
+        WebElement cvv = wd.findElement(By.id("cvv"));
+        cvv.clear();
+        cvv.sendKeys(Cvv);
+        wd.findElement(By.id("cardExpDate")).click();
+        wd.findElement(By.xpath("//div[(text()='2023')]")).click();
+        wd.findElement(By.xpath("//div[text()='Sep']")).click();
+        wd.findElement(By.className("MuiButton-contained")).click();
+        Assert.assertFalse(wd.getPageSource().contains("Paid by card"));
+
+    }
+    @Test
+    public void ClearButtonInCardExpDateIsPresent() {
+        wd.get(url);
+        WebElement holderName = wd.findElement(By.id("cardOwnerName"));
+        holderName.clear();
+        holderName.sendKeys(CardHolder);
+        WebElement numberCard = wd.findElement(By.id("cardNumber"));
+        numberCard.clear();
+        numberCard.sendKeys(CardNumber);
+        WebElement cvv = wd.findElement(By.id("cvv"));
+        cvv.clear();
+        cvv.sendKeys(Cvv);
+        wd.findElement(By.id("cardExpDate")).click();
+        wd.findElement(By.xpath("//div[(text()='2024')]")).click();
+        wd.findElement(By.xpath("//span[text()='Clear']")).click();
+        wd.findElement(By.className("MuiButton-contained")).click();
+        Assert.assertFalse(wd.getPageSource().contains("Paid by card"));
 
     }
 
